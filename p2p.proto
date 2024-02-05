@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+service Node {
+  rpc ConnectToNode (NodeInfo) returns (ConnectionResponse) {}
+  rpc GetConnectedNodes (Empty) returns (NodeList) {}
+  rpc BroadcastHeartbeat (HeartbeatMessage) returns (Empty) {}
+  rpc HandleNodeRemoval (NodeInfo) returns (Empty) {}
+  rpc BroadcastTransaction (Transaction) returns (Empty) {}
+  rpc ReceiveTransactions (Transaction) returns (Empty) {}
+  rpc GetTransactions (Empty) returns (TransactionsList) {}
+  rpc ReceivePrePrepare (Block) returns (Empty) {}
+  rpc ReceivePrepare (Empty) returns (Empty) {}
+  rpc ReceiveCommitted (Empty) returns (Empty) {}
+  rpc ReceiveInserted (Empty) returns (Empty) {}
+  rpc GetBlockchain (Empty) returns (BlockchainList) {}
+  rpc ReceiveTransactionsConnect (TransactionsList) returns (Empty) {}
+  rpc BroadcastTransactionsConnect (NodeInfo) returns (TransactionsList) {}
+  rpc ReceiveBlockchainConnect (BlockchainList) returns (Empty) {}
+  rpc BroadcastBlockchainConnect (NodeInfo) returns (BlockchainList) {}
+}
+
+message NodeInfo {
+  string node_id = 1;
+  string address = 2;
+}
+
+message ConnectionResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message Empty {}
+
+message NodeList {
+  repeated NodeInfo nodes = 1;
+}
+
+message HeartbeatMessage {
+  repeated NodeInfo nodes = 1;
+  NodeInfo node_first = 2;
+}
+
+message Transaction {
+  string node_id = 1;
+  string data = 2;
+  string timestamp = 3;
+}
+
+message TransactionsList {
+  repeated Transaction transactions = 1;
+}
+
+message Block {
+  string index = 1;
+  string timestamp = 2;
+  string previous_hash = 3;
+  repeated Transaction transactions = 4;
+  string hash = 5;
+}
+
+message BlockchainList {
+  repeated Block blocks = 1;
+}
